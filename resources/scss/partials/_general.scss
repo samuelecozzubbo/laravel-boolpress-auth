@@ -1,0 +1,27 @@
+header,aside{
+    a{
+        text-decoration: none;
+        color: white;
+        &:hover{
+            color: red;
+        }
+    }
+
+    li{
+        list-style: none;
+        line-height: 50px;
+    }
+}
+.main-wrapper{
+    height: 100vh;
+    overflow: hidden;
+}
+
+aside{
+    width: 150px;
+    height: 100%;
+}
+
+.content{
+    overflow: auto;
+}

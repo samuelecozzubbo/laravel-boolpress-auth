@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Guest\PageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [PageController::class, 'index'])->name('index.');
+Route::get('/', [PageController::class, 'index'])->name('home');
 
 //ho cancellato la route dashboard default perche voglio creare la rotta admin
 
@@ -40,6 +41,7 @@ Route::middleware(['auth', 'verified'])
         //group accetta una funzione di callback dove metto le rotte CRUD
         Route::get('/', [DashboardController::class, 'index'])->name('home');
         // Modifico dentro routeserverprovider la rotta di default da dashboard ad home
-
+        //Aggiungo le rotte CRUD
+        Route::resource('posts', PostController::class);
     });
 require __DIR__ . '/auth.php';
