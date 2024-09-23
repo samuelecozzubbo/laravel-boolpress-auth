@@ -20,11 +20,16 @@ Route::get('/', [PageController::class, 'index'])->name('index.');
 
 //ho cancellato la route dashboard default perche voglio creare la rotta admin
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+Route::middleware('auth')
+    ->prefix('profile')
+    ->name('profile.')
+    ->group(function () {
+        /* Avendo raggruppato per prefisso e per nome posso cancellare /profile nell'url e lascio solo /
+        e poi nel name non metto più profile.edit ecc ma lascio solo edit.... */
+        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+    });
 
 //raggruppo tutte le rotte admin sotto middleware
 //tutte hanno il prefisso admin, il nome iniziera con admin. e le raggruppo dentro la funzione di callback
