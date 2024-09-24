@@ -26,7 +26,17 @@
                     <td>
                         {{-- @dump($post->category)  category è un oggetto --}}
                         {{-- METTO IL NULL SAFE OPERATOR COSI SE CATEGORY E' NULL NON LA STAMPA --}}
-                        <span class="badge bg-success">{{ $post->category?->name }}</span>
+                        @if ($post->category)
+                            <span class="badge bg-success">
+                                <a class="text-white" href="{{ route('admin.postPerCategory', $post->category) }}">
+                                    {{ $post->category->name }}
+                                </a>
+
+                            </span>
+                        @else
+                            -
+                        @endif
+
                     </td>
                     <td>
                         <a href="{{ route('admin.posts.show', $post) }}" class="btn btn-info">

@@ -43,6 +43,19 @@
             @enderror
         </div>
 
+        {{-- Campo categoria --}}
+        <div class="form-group">
+            <label for="category">Categoria</label>
+            <select class="form-select" aria-label="Default select example" id="category" name="category_id">
+                <option value="">Seleziona una categoria</option>
+                @foreach ($categories as $category)
+                    <option @if (old('category_id') == $category->id) selected @endif value="{{ $category->id }}">
+                        {{ $category->name }}</option>
+                @endforeach
+
+            </select>
+        </div>
+
         <!-- Bottone per inviare il form -->
         <button type="submit" class="btn btn-primary">Crea Post</button>
     </form>

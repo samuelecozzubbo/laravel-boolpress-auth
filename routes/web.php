@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Guest\PageController;
@@ -43,5 +44,12 @@ Route::middleware(['auth', 'verified'])
         // Modifico dentro routeserverprovider la rotta di default da dashboard ad home
         //Aggiungo le rotte CRUD
         Route::resource('posts', PostController::class);
+        Route::get('/categories-posts', [CategoryController::class, 'categoryPosts'])->name('categoryPosts');
+        Route::resource('categories', CategoryController::class)->except([
+            'show',
+            'edit',
+            'create'
+        ]);
+        Route::get('/posts-per-category/{category}', [CategoryController::class, 'postPerCategory'])->name('postPerCategory');
     });
 require __DIR__ . '/auth.php';

@@ -15,6 +15,7 @@
     <p>{{ $post->txt }}</p>
 
     <p><strong>Tempo di lettura:</strong> {{ $post->reading_time }} minuti</p>
-
+    {{-- Se la categoria esiste la stampa senno stampa nessuna categoria --}}
+    <p>Categoria: {{ $post->category ? $post->category->name : 'Nessuna categoria' }}</p>
     <a href="{{ route('admin.posts.index') }}" class="btn btn-primary">Torna alla lista dei post</a>
 @endsection
