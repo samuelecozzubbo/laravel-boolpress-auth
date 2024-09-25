@@ -16,7 +16,7 @@
         @csrf <!-- Token CSRF necessario per protezione -->
 
         <!-- Campo per il titolo -->
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="title">Titolo</label>
             <input value="{{ old('title', $post->title) }}" type="text" name="title" id="title"
                 class="@error('title') is-invalid @enderror form-control">
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Campo per il testo del post -->
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="txt">Testo</label>
             <textarea name="txt" id="txt" class="@error('txt') is-invalid @enderror form-control" rows="5">{{ old('txt', $post->txt) }}</textarea>
             @error('txt')
@@ -35,7 +35,7 @@
         </div>
 
         <!-- Campo per il tempo di lettura -->
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="reading_time">Tempo di lettura (in minuti)</label>
             <input value="{{ old('reading_time', $post->reading_time) }}" type="number" name="reading_time"
                 id="reading_time" class="@error('reading_time') is-invalid @enderror form-control" min="1">
@@ -45,7 +45,7 @@
         </div>
 
         {{-- Campo categoria --}}
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="category">Categoria</label>
             <select class="form-select" aria-label="Default select example" id="category" name="category_id">
                 <option value="">Seleziona una categoria</option>
@@ -55,6 +55,20 @@
                     </option>
                 @endforeach
             </select>
+        </div>
+
+        {{-- Tag --}}
+        <div class="form-group mb-3">
+            <label for="category">Tags</label>
+            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                @foreach ($tags as $tag)
+                    <input type="checkbox" class="btn-check" id="tag-{{ $tag->id }}" autocomplete="off"
+                        value="{{ $tag->id }}" name="tags[]" @if (($errors->any() && in_array($tag->id, old('tags', []))) || (!$errors->any() && $post->tags->contains($tag))) checked @endif>
+                    <label class="btn btn-outline-primary" for="tag-{{ $tag->id }}">{{ $tag->name }}</label>
+                @endforeach
+                {{-- Dentro all if in array controlla se tag id è presente nell array old che però all inizio è vuoto quindi darebbe errore
+                dunque passo come parametro un array vuoto --}}
+            </div>
         </div>
 
 

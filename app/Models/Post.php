@@ -16,6 +16,11 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
     protected $fillable = ['category_id', 'title', 'slug', 'txt', 'reading_time'];
     protected $casts = [
         'created_at' => 'datetime:d/m/Y',

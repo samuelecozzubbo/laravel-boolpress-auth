@@ -14,6 +14,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Date</th>
                 <th scope="col">Categoria</th>
+                <th scope="col">Tag</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -37,6 +38,17 @@
                             -
                         @endif
 
+                    </td>
+                    <td>
+
+                        {{-- @dump($post->tags) --}}
+                        @forelse ($post->tags as $tag)
+                            <span class="badge bg-warning">
+                                {{ $tag->name }}
+                            </span>
+                        @empty
+                            -
+                        @endforelse
                     </td>
                     <td>
                         <a href="{{ route('admin.posts.show', $post) }}" class="btn btn-info">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Functions\Helper;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -30,12 +31,24 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $data = $request->all();
-        $data['slug'] = Helper::generateSlug($data['name'], Category::class);
-        $category = Category::create($data);
-        return redirect()->route('admin.categories.index', $category);
+        //Prima di inserire la nuova categoria devo verificare che esista
+        //se non esiste effetuo il create con il messaggio successivo
+        //Se esiste reindirizzo alla index con il messaggio di errore
+        $exists = Category::where('name', $request->name)->first();
+        //POSSO ACCEDERE A NAME ANCHE CON request['name']
+        //dd($request->name);
+
+        //A Questo punto faccio il controllo su exists
+        if (!$exists) {
+            $data = $request->all();
+            $data['slug'] = Helper::generateSlug($data['name'], Category::class);
+            $category = Category::create($data);
+            return redirect()->route('admin.categories.index')->with('success', 'Categoria inserita con successo');
+        } else {
+            return redirect()->route('admin.categories.index')->with('Error', 'Categoria già presente');
+        }
     }
 
     /**
@@ -57,7 +70,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
         // dd($request->all());
         $data = $request->all();

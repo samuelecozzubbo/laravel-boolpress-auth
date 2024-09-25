@@ -8,6 +8,8 @@ use App\Models\Post;
 use App\Http\Requests\PostRequest;
 use App\Functions\Helper;
 use App\Models\Category;
+use App\Models\Tag;
+use Illuminate\Support\Arr;
 
 class PostController extends Controller
 {
@@ -25,8 +27,9 @@ class PostController extends Controller
      */
     public function create()
     {
+        $tags = Tag::all();
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -39,6 +42,11 @@ class PostController extends Controller
 
         $post = Post::create($data);
 
+        //Verifico che in data esista la chiave tags che sta a significare che sono stati selezionati dei tag
+        if (array_key_exists('tags', $data)) {
+            //Se esiste la chiave creo con attach la relazione con il post creato e gli id dei tag selezionati
+            $post->tags()->attach($data['tags']);
+        }
         return redirect()->route('admin.posts.show', $post);
     }
 
@@ -55,8 +63,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $tags = Tag::all();
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -72,6 +81,17 @@ class PostController extends Controller
 
         $post->update($data);
 
+        //Verifico che in data esista la chiave tags che sta a significare che sono stati selezionati dei tag
+        if (array_key_exists('tags', $data)) {
+            //Se invio dei tag aggiorno tutte le relazioni
+            //sync aggiunge le relazioni mancanti e cancella quelle che non esistono più
+            $post->tags()->sync($data['tags']);
+        } else {
+            //se non vengono inviati tag devo cancellare le relazioni
+            //detach cancella tutte le relzioni
+            $post->tags()->detach();
+        }
+
         return redirect()->route('admin.posts.show', $post);
     }
 
@@ -80,6 +100,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        //in questo caso avendo messo cascadeOnDelete nella migration eliminando il post vengono automaticamente eliminate tutte le relazioni nella tabella post_tag
+        //se non lo avessimo fatto dovremmo toglierle con $post->tags()->detach()
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('cancelled', 'Post eliminato con successo');
