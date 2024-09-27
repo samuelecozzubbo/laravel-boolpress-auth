@@ -28,5 +28,11 @@
             @endforeach
         </ul>
     @endif
+    {{-- Immagine --}}
+    <div>
+        <img class="w-50" src="{{ asset('storage/' . $post->path_image) }}" alt="{{ $post->image_original_name }}"
+            onerror="this.src='/img/no-image.png'">
+        <p>{{ $post->image_original_name }}</p>
+    </div>
     <a href="{{ route('admin.posts.index') }}" class="btn btn-primary">Torna alla lista dei post</a>
 @endsection

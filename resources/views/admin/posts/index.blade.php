@@ -11,6 +11,7 @@
         <thead>
             <tr>
                 <th scope="col">Id</th>
+                <th scope="col">Image</th>
                 <th scope="col">Name</th>
                 <th scope="col">Date</th>
                 <th scope="col">Categoria</th>
@@ -22,6 +23,11 @@
             @foreach ($posts as $post)
                 <tr>
                     <td>{{ $post->id }}</td>
+                    <td class="col-2">
+                        <img class="w-100" src="{{ asset('storage/' . $post->path_image) }}"
+                            alt="{{ $post->image_original_name }}" onerror="this.src='{{ asset('img/no-image.png') }}'">
+                        <p>{{ $post->image_original_name }}</p>
+                    </td>
                     <td>{{ $post->title }}</td>
                     <td>{{ $post->created_at->format('d/m/Y') }}</td>
                     <td>

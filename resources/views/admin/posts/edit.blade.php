@@ -11,7 +11,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('admin.posts.update', $post) }}" method="POST">
+    <form action="{{ route('admin.posts.update', $post) }}" method="POST" enctype="multipart/form-data">
         @method('PUT')
         @csrf <!-- Token CSRF necessario per protezione -->
 
@@ -71,9 +71,32 @@
             </div>
         </div>
 
+        {{-- Immagine --}}<div class="form-group mb-3">
+            <label for="path_image">Immagine</label>
+            <input type="file" name="path_image" id="path_image" class="form-control"
+                placeholder="Inserisci il path dell'immagine" onchange=showImage(event)>
+            <img src="{{ asset('storage/' . $post->path_image) }}" alt="{{ $post->image_original_name }}"
+                onerror="this.src='/img/no-image.png'" class="thumb w-50" id="thumb">
+            @error('path_image')
+                <small class="text-danger"> {{ $message }} </small>
+            @enderror
+        </div>
+
 
 
         <!-- Bottone per inviare il form -->
         <button type="submit" class="btn btn-primary">Modifica Post</button>
     </form>
+
+    <script>
+        function showImage(event) {
+            //console.log(event.target.files[0]);
+            //console.log(URL.createObjectURL(event.target.files[0]));
+
+            const thumb = document.getElementById('thumb');
+            thumb.src = URL.createObjectURL(event.target.files[0]);
+
+        }
+    </script>
+
 @endsection

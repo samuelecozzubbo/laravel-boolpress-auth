@@ -25,6 +25,7 @@ class PostRequest extends FormRequest
             'title' => 'required|string|max:255',
             'txt' => 'required|string',
             'reading_time' => 'integer|min:1|max:60',
+            'path_image' => 'image|mimes:png,jpg|max:5120',
         ];
     }
 
@@ -48,6 +49,13 @@ class PostRequest extends FormRequest
             'reading_time.integer' => 'Il tempo di lettura deve essere un numero intero',
             'reading_time.min' => 'Il tempo di lettura deve essere di almeno 1 minuto',
             'reading_time.max' => 'Il tempo di lettura non può superare i 60 minuti',
+
+            //img
+            'path_image.required' => 'Il campo immagine è obbligatorio.',
+            'path_image.image' => 'Il file caricato deve essere un\'immagine.',
+            'path_image.mimes' => 'L\'immagine deve essere un file di tipo: png, jpg.',
+            'path_image.max' => 'L\'immagine non può superare i 5 MB di dimensione.',
+
         ];
     }
 }

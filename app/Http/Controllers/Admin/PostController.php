@@ -10,6 +10,9 @@ use App\Functions\Helper;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class PostController extends Controller
 {
@@ -39,6 +42,17 @@ class PostController extends Controller
     {
         $data = $request->all();
         $data['slug'] = Helper::generateSlug($data['title'], Post::class);
+
+        //VERIFICO se viene caricata l'immagine ossia se esiste la chaive path_image
+        if (array_key_exists('path_image', $data)) {
+            //se esiste la chiave salvo immagine dentro storage nella cartella uploads
+            $image_path = STORAGE::put('uploads', $data['path_image']);
+            //ottengo il nome originale dell'immagine
+            //aggiungo i valori a $data
+            $original_name = $request->file('path_image')->getClientOriginalName();
+            $data['path_image'] = $image_path;
+            $data['image_original_name'] = $original_name;
+        }
 
         $post = Post::create($data);
 
@@ -78,6 +92,22 @@ class PostController extends Controller
             $data['slug'] = Helper::generateSlug($data['title'], Post::class);
         }
 
+        //VERIFICO se viene caricata l'immagine ossia se esiste la chaive path_image
+        if (array_key_exists('path_image', $data)) {
+            //se esiste la chiave
+            //elimino la vecchia img
+            if ($post->path_image) {
+                Storage::delete($post->path_image);
+            }
+            //metto la nuova
+            $image_path = STORAGE::put('uploads', $data['path_image']);
+            //ottengo il nome originale dell'immagine
+            //aggiungo i valori a $data
+            $original_name = $request->file('path_image')->getClientOriginalName();
+            $data['path_image'] = $image_path;
+            $data['image_original_name'] = $original_name;
+        }
+
 
         $post->update($data);
 
@@ -100,6 +130,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        //SE è PRESENTE UN IMMAGINE LA ELIMINO
+        if ($post->path_image) {
+            Storage::delete($post->path_image);
+        }
+
         //in questo caso avendo messo cascadeOnDelete nella migration eliminando il post vengono automaticamente eliminate tutte le relazioni nella tabella post_tag
         //se non lo avessimo fatto dovremmo toglierle con $post->tags()->detach()
         $post->delete();
