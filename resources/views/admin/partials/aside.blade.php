@@ -1,7 +1,8 @@
 <aside class="text-bg-dark">
     <ul>
         <li>
-            <a href="{{ route('admin.home') }}"><i class="fa-solid fa-house"></i> HOME</a>
+            <a href="{{ route('admin.home') }}"><i class="fa-solid fa-house"></i> <span
+                    class="d-md-none d-lg-inline-block">HOME</span></a>
         </li>
         <li>
             <a href="{{ route('admin.posts.index') }}"><i class="fa-solid fa-list"></i> Elenco post</a>

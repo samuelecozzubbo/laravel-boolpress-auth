@@ -2,6 +2,12 @@
 
 @section('content')
     <h1>Elenco post </h1>
+    <div class="d-flex">
+        <form action="{{ route('admin.posts.index') }}" method="GET">
+            <input class="form-control me-2" type="text" placeholder="Cerca" name="search">
+            <button type="submit" class="btn btn-primary">Cerca</button>
+        </form>
+    </div>
     @if (@session('cancelled'))
         <div class="alert alert-success" role="alert">
             {{ session('cancelled') }}
@@ -10,7 +16,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Id</th>
+                <th scope="col">
+                    <a href="{{ route('admin.posts.index', ['direction' => $direction, 'column' => 'id']) }}">ID</a>
+                </th>
                 <th scope="col">Image</th>
                 <th scope="col">Name</th>
                 <th scope="col">Date</th>

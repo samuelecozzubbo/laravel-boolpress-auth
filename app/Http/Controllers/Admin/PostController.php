@@ -21,8 +21,29 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('id', 'desc')->paginate(15);
-        return view('admin.posts.index', compact('posts'));
+        //direction
+        if (isset($_GET['direction'])) {
+            $direction = $_GET['direction'] == 'asc' ? 'desc' : 'asc';
+        } else {
+            $direction = 'desc';
+        }
+        //column
+        if (isset($_GET['column'])) {
+            $column = $_GET['column'];
+            $post = Post::orderBy($column, $direction)->paginate(15);
+        } else {
+            $posts = POST::orderBy('id')->paginate(15);
+        }
+
+        if (isset($_GET['search'])) {
+            $posts = POST::where('title', 'LIKE', '%' . $_GET['search'] . '%')->orderBy('title')->paginate(10);
+        } else {
+            $posts = POST::orderBy('id', $direction)->paginate(15);
+        }
+        //$posts = Post::orderBy('id', 'desc')->paginate(15);
+        //dump(request()->query());
+        $posts->appends(request()->query());
+        return view('admin.posts.index', compact('posts', 'direction'));
     }
 
     /**
