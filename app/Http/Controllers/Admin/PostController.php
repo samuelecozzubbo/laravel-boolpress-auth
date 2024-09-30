@@ -67,7 +67,7 @@ class PostController extends Controller
         //VERIFICO se viene caricata l'immagine ossia se esiste la chaive path_image
         if (array_key_exists('path_image', $data)) {
             //se esiste la chiave salvo immagine dentro storage nella cartella uploads
-            $image_path = STORAGE::put('uploads', $data['path_image']);
+            $image_path = Storage::put('uploads', $data['path_image']);
             //ottengo il nome originale dell'immagine
             //aggiungo i valori a $data
             $original_name = $request->file('path_image')->getClientOriginalName();

@@ -70,7 +70,8 @@
             </div>
         </div>
 
-        {{-- Immagine --}}<div class="form-group mb-3">
+        {{-- Immagine --}}
+        <div class="form-group mb-3">
             <label for="path_image">Immagine</label>
             <input type="file" name="path_image" id="path_image" class="form-control"
                 placeholder="Inserisci il path dell'immagine" onchange=showImage(event)>

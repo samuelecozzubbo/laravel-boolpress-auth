@@ -13,6 +13,7 @@
     </div>
 
     <p>{{ $post->txt }}</p>
+    <p>Slug: {{ $post->slug }}</p>
 
     <p><strong>Tempo di lettura:</strong> {{ $post->reading_time }} minuti</p>
     {{-- Se la categoria esiste la stampa senno stampa nessuna categoria --}}
