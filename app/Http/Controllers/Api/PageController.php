@@ -17,7 +17,7 @@ class PageController extends Controller
             'surname' => 'De ughi'
         ];
         //Con with( ) ottengo le entità in relazione
-        $posts = Post::orderBy('id', 'desc')->with('category', 'tags')->paginate(10);
+        $posts = Post::orderBy('id', 'desc')->with('category', 'tags', 'user')->paginate(10);
         $success = true;
         $response = [
             'success' => $success,

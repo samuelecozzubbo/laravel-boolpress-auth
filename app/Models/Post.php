@@ -16,12 +16,17 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
     }
 
-    protected $fillable = ['category_id', 'title', 'slug', 'txt', 'reading_time', 'path_image', 'image_original_name'];
+    protected $fillable = ['category_id', 'user_id', 'title', 'slug', 'txt', 'reading_time', 'path_image', 'image_original_name'];
     protected $casts = [
         'created_at' => 'datetime:d/m/Y',
     ];

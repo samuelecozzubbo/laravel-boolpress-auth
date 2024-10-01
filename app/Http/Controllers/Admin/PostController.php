@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -21,6 +22,7 @@ class PostController extends Controller
      */
     public function index()
     {
+        //dd(Auth::id());
         //direction
         if (isset($_GET['direction'])) {
             $direction = $_GET['direction'] == 'asc' ? 'desc' : 'asc';
@@ -30,15 +32,16 @@ class PostController extends Controller
         //column
         if (isset($_GET['column'])) {
             $column = $_GET['column'];
-            $post = Post::orderBy($column, $direction)->paginate(15);
+            $post = Post::orderBy($column, $direction)->where('user_id', Auth::id())->paginate(15);
         } else {
-            $posts = POST::orderBy('id')->paginate(15);
+            //chiamata di default
+            $posts = POST::orderBy('id')->where('user_id', Auth::id())->paginate(15);
         }
 
         if (isset($_GET['search'])) {
-            $posts = POST::where('title', 'LIKE', '%' . $_GET['search'] . '%')->orderBy('title')->paginate(10);
+            $posts = POST::where('title', 'LIKE', '%' . $_GET['search'] . '%')->orderBy('title')->where('user_id', Auth::id())->paginate(10);
         } else {
-            $posts = POST::orderBy('id', $direction)->paginate(15);
+            $posts = POST::orderBy('id', $direction)->where('user_id', Auth::id())->paginate(15);
         }
         //$posts = Post::orderBy('id', 'desc')->paginate(15);
         //dump(request()->query());
@@ -63,6 +66,7 @@ class PostController extends Controller
     {
         $data = $request->all();
         $data['slug'] = Helper::generateSlug($data['title'], Post::class);
+        $data['user_id'] = Auth::id();
 
         //VERIFICO se viene caricata l'immagine ossia se esiste la chaive path_image
         if (array_key_exists('path_image', $data)) {
@@ -90,7 +94,11 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('admin.posts.show', compact('post'));
+        if ($post->user_id != Auth::id()) {
+            abort(404);
+        } else {
+            return view('admin.posts.show', compact('post'));
+        }
     }
 
     /**
@@ -108,6 +116,10 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
+        if ($post->user_id != Auth::id()) {
+            abort(404);
+        }
+
         $data = $request->all();
         if ($data['title'] != $post->title) {
             $data['slug'] = Helper::generateSlug($data['title'], Post::class);
