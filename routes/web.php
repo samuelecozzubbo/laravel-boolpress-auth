@@ -32,7 +32,7 @@ Route::middleware('auth')
         Route::patch('/', [ProfileController::class, 'update'])->name('update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
     });
-
+//MEGLIO SCRIVERE I RESOURCES PER ULTIMI
 //raggruppo tutte le rotte admin sotto middleware
 //tutte hanno il prefisso admin, il nome iniziera con admin. e le raggruppo dentro la funzione di callback
 Route::middleware(['auth', 'verified'])
@@ -42,6 +42,11 @@ Route::middleware(['auth', 'verified'])
         //group accetta una funzione di callback dove metto le rotte CRUD
         Route::get('/', [DashboardController::class, 'index'])->name('home');
         // Modifico dentro routeserverprovider la rotta di default da dashboard ad home
+        //rotta trash
+        Route::get('posts/trash', [PostController::class, 'trash'])->name('posts.trash');
+        Route::patch('posts/{post}/restore', [PostController::class, 'restore'])->name('posts.restore');
+        Route::delete('posts/{post}/delete', [PostController::class, 'delete'])->name('posts.delete');
+
         //Aggiungo le rotte CRUD
         Route::resource('posts', PostController::class);
         Route::get('/categories-posts', [CategoryController::class, 'categoryPosts'])->name('categoryPosts');

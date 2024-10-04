@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('APP_FRONTEND_URL', 'http://localhost:5173')],  // Usa variabile d'ambiente per l'URL frontend
+    'allowed_origins' => [env('APP_FRONTEND_URL', 'http://localhost:5174')],  // Usa variabile d'ambiente per l'URL frontend
 
     'allowed_origins_patterns' => [],
 

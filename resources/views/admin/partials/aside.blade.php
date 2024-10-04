@@ -17,5 +17,8 @@
         <li>
             <a href="{{ route('admin.categoryPosts') }}"><i class="fa-solid fa-layer-group"></i>Post per categorie</a>
         </li>
+        <li>
+            <a href="{{ route('admin.posts.trash') }}"><i class="fa-solid fa-trash"></i>Post Eliminati</a>
+        </li>
     </ul>
 </aside>

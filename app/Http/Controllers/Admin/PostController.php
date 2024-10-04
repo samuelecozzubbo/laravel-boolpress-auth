@@ -164,14 +164,45 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //SE è PRESENTE UN IMMAGINE LA ELIMINO
-        if ($post->path_image) {
-            Storage::delete($post->path_image);
-        }
+        //DATO CHE HO AGGIUNTO IL SOFT DELETE LO FARO
+        //NEL METODO DELETE
+
+        // if ($post->path_image) {
+        //     Storage::delete($post->path_image);
+        // }
 
         //in questo caso avendo messo cascadeOnDelete nella migration eliminando il post vengono automaticamente eliminate tutte le relazioni nella tabella post_tag
         //se non lo avessimo fatto dovremmo toglierle con $post->tags()->detach()
+        //Commenta il delete image in destroy se fai il soft delete
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('cancelled', 'Post eliminato con successo');
+    }
+
+    //trash
+    public function trash()
+    {
+        $posts = Post::onlyTrashed()
+            ->where('user_id', Auth::id())
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+        return view('admin.posts.trash', compact('posts'));
+    }
+
+    public function restore($id)
+    {
+        $post = Post::withTrashed()->find($id);
+        $post->restore();
+        return redirect()->route('admin.posts.index')->with('message', 'Post ripristinato con successo');
+    }
+
+    public function delete($id)
+    {
+        $post = Post::withTrashed()->find($id);
+        if ($post->path_image) {
+            Storage::delete($post->path_image);
+        }
+        $post->forceDelete();
+        return redirect()->route('admin.posts.index')->with('message', 'Post eliminato definitivamente con successo');
     }
 }

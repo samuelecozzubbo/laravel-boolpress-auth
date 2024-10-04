@@ -1,7 +1,7 @@
 <header>
     <div class="container-fluid text-bg-dark d-flex align-items-center justify-content-between px-3">
         <div>
-            <a href="{{ route('home') }}">Vai al sito</a>
+            <a href="http://localhost:5173/" target="_blank">Vai al sito</a>
         </div>
         <div>
             <ul class="navbar-nav ml-auto">

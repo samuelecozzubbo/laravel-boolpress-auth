@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Storage;
+
 
 class PageController extends Controller
 {
@@ -35,16 +37,18 @@ class PageController extends Controller
     public function postBySlug($slug)
     {
 
-        $post = Post::where('slug', $slug)->with('category', 'tags')->first();
+        $post = Post::where('slug', $slug)->with('category', 'tags', 'user')->first();
         if ($post) {
             $success = true;
             //devo sovrascrivere il percorso assoluto per le immagini
             //Se un post non ha immagina otterrò solo store
             //allora faccio in modo che arrivi almeno l'immagine placeholder
             if ($post->path_image) {
-                $post->path_image = asset('storage/' . $post->path_image);
+                //$post->path_image = asset('storage/' . $post->path_image);
+                $post->path_image = Storage::url($post->path_image);
+                //con storage devi cambiare nell env l'app URL e mettere :8000
             } else {
-                $post->path_image = '/img/no-image.png';
+                $post->path_image = Storage::url('img/no-image.png');
                 $post->image_original_name = 'no image';
             }
         } else {
